@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const postSchema = new mongoose.Schema({
   title: String,
   author: String,
-  created_utc: Number,
+  created_utc: String,
   ups: Number,
   num_comments: Number,
 });

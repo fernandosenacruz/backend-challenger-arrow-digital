@@ -1,11 +1,15 @@
-import express from 'express';
-import { Post } from '../models/Post';
+import { Router } from 'express';
+import postController from '../controllers/postController';
+import postOrderController from '../controllers/postOrderController';
 
-const router = express.Router();
+const router: Router = Router();
 
-router.get('/posts', async (req, res) => {
-  const posts = await Post.find();
-  res.json(posts);
+router.get('/posts', async (req, res, next) => {
+  await postController(req, res, next);
+});
+
+router.get('/posts/sorted', async (req, res, next) => {
+  await postOrderController(req, res, next);
 });
 
 export default router;
