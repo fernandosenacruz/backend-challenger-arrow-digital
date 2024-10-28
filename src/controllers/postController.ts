@@ -8,7 +8,6 @@ const postController = async (
   next: NextFunction
 ) => {
   try {
-    console.log(request.query)
     const { initialDate, finalDate, page = 1, limit = 10 } = request.query;
 
     const errors = validationResult(request);

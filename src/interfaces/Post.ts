@@ -1,4 +1,4 @@
-export interface Post {
+export interface PostReddit {
   data: {
     approved_at_utc?: Date;
     subreddit: string;
@@ -108,5 +108,25 @@ export interface Post {
     num_crossposts: number;
     media?: never;
     is_video: boolean;
-  }
+  };
+}
+
+export interface PostsReddit {
+  kind: string;
+  data: {
+    modhash: string;
+    dist: number;
+    children: Array<PostReddit>;
+    after: string;
+    before: string;
+  };
+}
+
+export interface PostMongo {
+  id: string;
+  title: string;
+  author: string;
+  created_utc: string;
+  ups: number;
+  num_comments: number;
 }
