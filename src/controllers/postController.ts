@@ -9,7 +9,7 @@ const postController = async (
 ) => {
   try {
     console.log(request.query)
-    const { initialDate, finalDate } = request.query;
+    const { initialDate, finalDate, page = 1, limit = 10 } = request.query;
 
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -18,7 +18,9 @@ const postController = async (
 
     const posts = await postService.getPosts({
       initialDate: initialDate as string,
-      finalDate: finalDate as string
+      finalDate: finalDate as string,
+      page: +page,
+      limit: +limit,
     });
 
     return response.status(200).json(posts);

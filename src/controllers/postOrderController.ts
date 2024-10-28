@@ -8,8 +8,7 @@ const postOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { initialDate, finalDate, orderBy } = request.query;
-    console.log(request.query);
+    const { initialDate, finalDate, orderBy, page = 1, limit = 10 } = request.query;
 
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -20,6 +19,8 @@ const postOrderController = async (
       initialDate: initialDate as string,
       finalDate: finalDate as string,
       orderBy: orderBy as 'comments' | 'ups',
+      page: +page,
+      limit: +limit,
     });
 
     return response.status(200).json(posts);
