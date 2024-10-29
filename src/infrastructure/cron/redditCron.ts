@@ -1,7 +1,7 @@
 import cron from 'node-cron';
-import { fetchHotThreads } from '../services/redditService';
-import { Thread } from '../models/thread';
-import { ThreadMongo } from '../interfaces/Thread';
+import { fetchHotThreads } from '../../services/redditService';
+import { Thread } from '../database/models/thread';
+import { ThreadMongo } from '../../interfaces/Thread';
 
 cron.schedule('0 9 * * *', async () => {
   // A tarefa será executada todos os dias às 9:00 UTC

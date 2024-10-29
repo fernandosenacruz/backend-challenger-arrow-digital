@@ -1,24 +1,29 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import cors from 'cors';
+import { apiDocs, redocly, swagger } from './routes';
+import { connectToDatabase } from './infrastructure/database/connection';
 import threadRoutes from './routes/thread';
-import dotenv from 'dotenv';
-import './cron/redditCron';
+import './infrastructure/cron/redditCron';
+import { loadVariables } from './utils/envLoader';
 
-dotenv.config();
+const startServer = async () => {
+  const { PORT, BASE_URL, MONGO_URL } = loadVariables();
+  if (!BASE_URL) throw new Error('Variável de ambiente BASE_URL não definida');
 
-const app = express();
-const PORT = process.env.PORT ?? 3000;
-const MONGO_URL = process.env.MONGO_URL ?? 'mongodb://localhost:27017/reddit_artificial';
+  const app = express();
+  app.use(express.json(), cors());
+  app.use('/api', apiDocs, redocly, swagger, threadRoutes);
 
-app.use(express.json());
-app.use('/api', threadRoutes);
+  await connectToDatabase(MONGO_URL);
 
-mongoose
-  .connect(MONGO_URL)
-  .then(() => {
-    console.log('Conectado ao MongoDB');
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT}`);
-    });
-  })
-  .catch((err) => console.error('Erro de conexão:', err));
+  app.get(
+    '/env',
+    (_req: any, res: { json: (arg0: { BASE_URL: string }) => any }) =>
+      res.json({ BASE_URL })
+  );
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+};
+
+startServer();

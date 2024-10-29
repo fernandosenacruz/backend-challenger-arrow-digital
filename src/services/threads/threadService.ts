@@ -1,5 +1,5 @@
 import { QueryThread } from '../../interfaces/QueryThread';
-import { Thread } from '../../models/thread';
+import { Thread } from '../../infrastructure/database/models/thread';
 
 export const threadService = {
   async getThreads({
