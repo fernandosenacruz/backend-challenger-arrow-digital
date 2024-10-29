@@ -1,18 +1,18 @@
-import { QueryPost } from './../../interfaces/QueryPost';
-import { Post } from '../../models/Post';
+import { QueryThread } from '../../interfaces/QueryThread';
+import { Thread } from '../../models/thread';
 
-export const postService = {
-  async getPosts({
+export const threadService = {
+  async getThreads({
     initialDate,
     finalDate,
     orderBy,
     page = 1,
     limit = 10,
-  }: QueryPost) {
+  }: QueryThread) {
     const skip = (page - 1) * limit;
     const dbOrderBy = orderBy === 'comments' ? 'num_comments' : orderBy;
 
-    return await Post.find({
+    return await Thread.find({
       created_utc: {
         $gte: initialDate,
         $lte: finalDate,

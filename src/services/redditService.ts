@@ -1,15 +1,15 @@
 import axios from 'axios';
-import { PostReddit } from '../interfaces/Post';
+import { ThreadReddit } from '../interfaces/Thread';
 import toISODate from '../utils/toISODate';
 
-export const fetchHotPosts = async () => {
+export const fetchHotThreads = async () => {
   const response = await axios.get('https://api.reddit.com/r/artificial/hot');
-  return response.data.data.children.map((post: PostReddit) => ({
-    id: post.data.id,
-    title: post.data.title,
-    author: post.data.author,
-    created_utc: toISODate(post.data.created_utc),
-    ups: post.data.ups,
-    num_comments: post.data.num_comments,
+  return response.data.data.children.map((thread: ThreadReddit) => ({
+    id: thread.data.id,
+    title: thread.data.title,
+    author: thread.data.author,
+    created_utc: toISODate(thread.data.created_utc),
+    ups: thread.data.ups,
+    num_comments: thread.data.num_comments,
   }));
 };

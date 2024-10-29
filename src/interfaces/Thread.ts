@@ -1,4 +1,4 @@
-export interface PostReddit {
+export interface ThreadReddit {
   data: {
     approved_at_utc?: Date;
     subreddit: string;
@@ -111,18 +111,18 @@ export interface PostReddit {
   };
 }
 
-export interface PostsReddit {
+export interface ThreadsReddit {
   kind: string;
   data: {
     modhash: string;
     dist: number;
-    children: Array<PostReddit>;
+    children: Array<ThreadReddit>;
     after: string;
     before: string;
   };
 }
 
-export interface PostMongo {
+export interface ThreadMongo {
   id: string;
   title: string;
   author: string;

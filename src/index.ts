@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import postRoutes from './routes/posts';
+import threadRoutes from './routes/thread';
 import dotenv from 'dotenv';
 import './cron/redditCron';
 
@@ -11,7 +11,7 @@ const PORT = process.env.PORT ?? 3000;
 const MONGO_URL = process.env.MONGO_URL ?? 'mongodb://localhost:27017/reddit_artificial';
 
 app.use(express.json());
-app.use('/api', postRoutes);
+app.use('/api', threadRoutes);
 
 mongoose
   .connect(MONGO_URL)

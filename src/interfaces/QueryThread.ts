@@ -1,6 +1,6 @@
 type OrderBy = 'comments' | 'ups';
 
-export interface QueryPost {
+export interface QueryThread {
   initialDate: string;
   finalDate: string;
   orderBy?: OrderBy;

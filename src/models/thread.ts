@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const postSchema = new mongoose.Schema({
+const threadSchema = new mongoose.Schema({
   _id: String,
   title: String,
   author: String,
@@ -9,4 +9,4 @@ const postSchema = new mongoose.Schema({
   num_comments: Number,
 });
 
-export const Post = mongoose.model('Post', postSchema);
+export const Thread = mongoose.model('Thread', threadSchema);
