@@ -1,0 +1,265 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Api de Threads do subreddit artificial desenvolvida para o desafio técnico.",
+    "description": "Api de estudos desenvolvida para realizar um fetch postagens HOT do subreddit artificial.",
+    "contact": {
+      "name": "Suport",
+      "url": "https://www.linkedin.com/in/fernandosenacruz/"
+    },
+    "license": "MIT",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/threads": {
+      "get": {
+        "description": "Lista as postagens filtradas por data inicial e final. Padrão 'limit=10'",
+        "parameters": [
+          {
+            "description ": "Data inicial",
+            "type": "string",
+            "name": "initialDate",
+            "required": true,
+            "in": "query"
+          },
+          {
+            "description ": "Data final",
+            "type": "string",
+            "name": "finalDate",
+            "required": true,
+            "in": "query"
+          },
+          {
+            "description ": "Página",
+            "type": "number",
+            "name": "page",
+            "required": false,
+            "in": "query"
+          },
+          {
+            "description ": "Limite de itens por página",
+            "type": "number",
+            "name": "limit",
+            "required": false,
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseThreads"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseThreadsBadRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/threads/sorted": {
+      "get": {
+        "description": "Lista as postagens filtradas por data inicial e final e ordenadas por ups ou comments. Padrão 'limit=10'",
+        "parameters": [
+          {
+            "description ": "Data inicial",
+            "type": "string",
+            "name": "initialDate",
+            "required": true,
+            "in": "query"
+          },
+          {
+            "description ": "Data final",
+            "type": "string",
+            "name": "finalDate",
+            "required": true,
+            "in": "query"
+          },
+          {
+            "description ": "orderBy",
+            "type": "string",
+            "name": "orderBy",
+            "enum": ["ups", "comments"],
+            "required": false,
+            "in": "query"
+          },
+          {
+            "description ": "Página",
+            "type": "number",
+            "name": "page",
+            "required": false,
+            "in": "query"
+          },
+          {
+            "description ": "Limite de itens por página",
+            "type": "number",
+            "name": "limit",
+            "required": false,
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseThreads"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseThreadsOrderByBadRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ResponseThread": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "number",
+            "description": "Id da postagem",
+            "example": "1gdderl"
+          },
+          "author": {
+            "type": "string",
+            "description": "Nome do autor da postagem",
+            "example": "MetaKnowing"
+          },
+          "created_utc": {
+            "type": "string",
+            "description": "Data de criação da postagem",
+            "example": "2024-10-27T15:24:03.000Z"
+          },
+          "num_comments": {
+            "type": "number",
+            "description": "Número de comentários de usuários",
+            "example": "1"
+          },
+          "title": {
+            "type": "string",
+            "description": "Título da postagem",
+            "example": "Weird... in the middle of a response, Claude suddenly notices it might be hallucinating"
+          },
+          "ups": {
+            "type": "number",
+            "description": "Número de votos positivos",
+            "example": "1"
+          }
+        }
+      },
+      "ResponseThreads": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": "200"
+          },
+          "threads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseThread"
+            }
+          }          
+        }
+      },
+      "ResponseError": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "field"
+          },
+          "msg": {
+            "type": "string",
+            "example": "initialDate must be a valid date in ISO 8601 format"
+          },
+          "path": {
+            "type": "string",
+            "example": "initialDate"
+          },
+          "location": {
+            "type": "string",
+            "example": "query"
+          }
+        }
+      },
+      "ResponseErrorOrderBy": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "field"
+          },
+          "value": {
+            "type": "string",
+            "example": "ximira"
+          },
+          "msg": {
+            "type": "string",
+            "example": "orderBy must be either \"comments\" or \"ups\""
+          },
+          "path": {
+            "type": "string",
+            "example": "orderBy"
+          },
+          "location": {
+            "type": "string",
+            "example": "query"
+          }
+        }
+      },
+      "ResponseThreadsBadRequest": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": "400"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseError"
+            }
+          }
+        }
+      },
+      "ResponseThreadsOrderByBadRequest": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": "400"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseErrorOrderBy"
+            }
+          }
+        }
+      }
+    }
+  }
+}
