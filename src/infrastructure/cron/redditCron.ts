@@ -5,7 +5,9 @@ import { ThreadMongo } from '../../interfaces/Thread';
 
 cron.schedule('0 9 * * *', async () => {
   // A tarefa será executada todos os dias às 9:00 UTC
-  console.log('Executando tarefa agendada para buscar threads do subreddit artificial.');
+  console.log(
+    'Executando tarefa agendada para buscar threads do subreddit artificial.'
+  );
   try {
     const threads = await fetchHotThreads();
 

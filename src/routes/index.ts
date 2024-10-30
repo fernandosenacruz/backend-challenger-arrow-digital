@@ -3,9 +3,4 @@ import redocly from './redocly';
 import swagger from './swagger';
 import thread from './thread';
 
-export {
-  apiDocs,
-  redocly,
-  swagger,
-  thread,
-};
+export { apiDocs, redocly, swagger, thread };

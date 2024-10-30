@@ -1,9 +1,9 @@
 import { query } from 'express-validator';
-import { strigRequiredValidator } from "../valitadorsUtils";
+import { strigRequiredValidator } from '../valitadorsUtils';
 
 export const getThreadsSchema = [
   strigRequiredValidator('initialDate'),
-  strigRequiredValidator('finalDate')
+  strigRequiredValidator('finalDate'),
 ];
 
 export const getThreadsOrderBySchema = [

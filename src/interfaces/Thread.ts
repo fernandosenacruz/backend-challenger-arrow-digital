@@ -29,7 +29,7 @@ export interface ThreadReddit {
     subreddit_type: string;
     ups: number;
     total_awards_received: number;
-    media_embed: {};
+    media_embed: object;
     thumbnail_width?: number;
     author_flair_template_id?: string;
     is_original_content: boolean;
@@ -38,7 +38,7 @@ export interface ThreadReddit {
     is_reddit_media_domain: boolean;
     is_meta: boolean;
     category?: string;
-    secure_media_embed: {};
+    secure_media_embed: object;
     link_flair_text: string;
     can_mod_post: boolean;
     score: number;
@@ -49,7 +49,7 @@ export interface ThreadReddit {
     edited: number;
     author_flair_css_class?: string;
     author_flair_richtext: never[];
-    gildings: {};
+    gildings: object;
     content_categories?: never[];
     is_self: boolean;
     mod_note?: string | null;

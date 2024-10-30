@@ -8,7 +8,13 @@ const threadOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { initialDate, finalDate, orderBy, page = 1, limit = 10 } = request.query;
+    const {
+      initialDate,
+      finalDate,
+      orderBy,
+      page = 1,
+      limit = 10,
+    } = request.query;
 
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
