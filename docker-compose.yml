@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: backend-arrow-digital
+    build: .
+    volumes:
+      - ./src:/backend-challenger-arrow-digital/src
+    ports:
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'lsof', '-t', '-i:3000']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${DB_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${DB_PASSWORD}'
+
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    shm_size: 256mb
+    container_name: db_arrow_digital
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${DB_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${DB_PASSWORD}'
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://${DB_USERNAME}:${DB_PASSWORD}@localhost:27017/?authSource=admin --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
