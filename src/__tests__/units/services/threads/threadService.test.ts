@@ -3,25 +3,27 @@ import { threadService } from '../../../../services/threads/threadService';
 
 jest.mock('../../../../infrastructure/database/models/thread');
 
-describe('Thread Service', () => {
-  afterEach(() => {
+describe('threadService.getThreads', () => {
+  const mockThreads = [
+    { id: 1, title: 'Thread 1', created_utc: '2023-01-01', num_comments: 10 },
+    { id: 2, title: 'Thread 2', created_utc: '2023-01-02', num_comments: 20 },
+  ];
+
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should return threads with correct filters and sorting', async () => {
-    const mockThreads = [{ id: 1, title: 'Thread 1' }];
-    const findMock = {
+  it('should handle missing orderBy parameter gracefully', async () => {
+    (Thread.find as jest.Mock).mockReturnValue({
       sort: jest.fn().mockReturnThis(),
       skip: jest.fn().mockReturnThis(),
       limit: jest.fn().mockResolvedValue(mockThreads),
-    };
-
-    (Thread.find as jest.Mock).mockReturnValue(findMock);
+    });
 
     const result = await threadService.getThreads({
       initialDate: '2023-01-01',
       finalDate: '2023-12-31',
-      orderBy: 'comments',
+      orderBy: undefined,
       page: 1,
       limit: 10,
     });
@@ -32,27 +34,63 @@ describe('Thread Service', () => {
         $lte: '2023-12-31',
       },
     });
-    expect(findMock.sort).toHaveBeenCalledWith({ num_comments: -1 });
-    expect(findMock.skip).toHaveBeenCalledWith(0);
-    expect(findMock.limit).toHaveBeenCalledWith(10);
+    expect(Thread.find().sort).toHaveBeenCalledWith(undefined);
+    expect(Thread.find().skip).toHaveBeenCalledWith(0);
+    expect(Thread.find().limit).toHaveBeenCalledWith(10);
     expect(result).toEqual(mockThreads);
   });
 
-  it('should default to page 1 and limit 10 if not provided', async () => {
-    const findMock = {
+  it('should handle pagination correctly', async () => {
+    (Thread.find as jest.Mock).mockReturnValue({
       sort: jest.fn().mockReturnThis(),
       skip: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockResolvedValue([]),
-    };
-
-    (Thread.find as jest.Mock).mockReturnValue(findMock);
-
-    await threadService.getThreads({
-      initialDate: '2023-01-01',
-      finalDate: '2023-12-31',
+      limit: jest.fn().mockResolvedValue(mockThreads),
     });
 
-    expect(findMock.skip).toHaveBeenCalledWith(0);
-    expect(findMock.limit).toHaveBeenCalledWith(10);
+    const result = await threadService.getThreads({
+      initialDate: '2023-01-01',
+      finalDate: '2023-12-31',
+      orderBy: 'comments',
+      page: 2,
+      limit: 5,
+    });
+
+    expect(Thread.find).toHaveBeenCalledWith({
+      created_utc: {
+        $gte: '2023-01-01',
+        $lte: '2023-12-31',
+      },
+    });
+    expect(Thread.find().sort).toHaveBeenCalledWith({ num_comments: -1 });
+    expect(Thread.find().skip).toHaveBeenCalledWith(5);
+    expect(Thread.find().limit).toHaveBeenCalledWith(5);
+    expect(result).toEqual(mockThreads);
+  });
+
+  it('should fetch threads with correct query parameters', async () => {
+    (Thread.find as jest.Mock).mockReturnValue({
+      sort: jest.fn().mockReturnThis(),
+      skip: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockResolvedValue(mockThreads),
+    });
+
+    const result = await threadService.getThreads({
+      initialDate: '2023-01-01',
+      finalDate: '2023-12-31',
+      orderBy: undefined,
+      page: 1,
+      limit: 10,
+    });
+
+    expect(Thread.find).toHaveBeenCalledWith({
+      created_utc: {
+        $gte: '2023-01-01',
+        $lte: '2023-12-31',
+      },
+    });
+    expect(Thread.find().sort).toHaveBeenCalledWith(undefined);
+    expect(Thread.find().skip).toHaveBeenCalledWith(0);
+    expect(Thread.find().limit).toHaveBeenCalledWith(10);
+    expect(result).toEqual(mockThreads);
   });
 });

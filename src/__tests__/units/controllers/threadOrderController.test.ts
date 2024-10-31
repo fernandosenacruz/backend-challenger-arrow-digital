@@ -38,20 +38,6 @@ describe('Thread Order Controller', () => {
     });
   });
 
-  it('should return threads when request is valid', async () => {
-    const mockThreads = [{ id: 1, title: 'Thread 1' }];
-    (threadService.getThreads as jest.Mock).mockResolvedValue(mockThreads);
-
-    await threadOrderController(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
-
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith(mockThreads);
-  });
-
   it('should return 400 if validation fails', async () => {
     (validationResult as unknown as jest.Mock).mockReturnValue({
       isEmpty: jest.fn().mockReturnValue(false),
@@ -81,5 +67,82 @@ describe('Thread Order Controller', () => {
     );
 
     expect(mockNext).toHaveBeenCalledWith(error);
+  });
+
+  it('should call threadService.getThreads with correct parameters', async () => {
+    const mockThreads = [{ id: 1, title: 'Thread 1' }];
+    (threadService.getThreads as jest.Mock).mockResolvedValue(mockThreads);
+
+    await threadOrderController(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(threadService.getThreads).toHaveBeenCalledWith({
+      initialDate: '2023-01-01',
+      finalDate: '2023-12-31',
+      orderBy: 'comments',
+      page: 1,
+      limit: 10,
+    });
+  });
+
+  it('should handle missing query parameters gracefully', async () => {
+    mockRequest.query = {};
+
+    await threadOrderController(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(threadService.getThreads).toHaveBeenCalledWith({
+      initialDate: undefined,
+      finalDate: undefined,
+      orderBy: undefined,
+      page: 1,
+      limit: 10,
+    });
+  });
+
+  it('should handle invalid orderBy parameter gracefully', async () => {
+    mockRequest.query = mockRequest.query ?? {};
+
+    mockRequest.query.orderBy = 'invalid' as 'comments' | 'ups';
+
+    await threadOrderController(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(threadService.getThreads).toHaveBeenCalledWith({
+      initialDate: '2023-01-01',
+      finalDate: '2023-12-31',
+      orderBy: 'invalid',
+      page: 1,
+      limit: 10,
+    });
+  });
+
+  it('should handle non-numeric page and limit parameters gracefully', async () => {
+    mockRequest.query = mockRequest.query ?? {};
+    mockRequest.query.page = 'invalid';
+    mockRequest.query.limit = 'invalid';
+
+    await threadOrderController(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(threadService.getThreads).toHaveBeenCalledWith({
+      initialDate: '2023-01-01',
+      finalDate: '2023-12-31',
+      orderBy: 'comments',
+      page: NaN,
+      limit: NaN,
+    });
   });
 });

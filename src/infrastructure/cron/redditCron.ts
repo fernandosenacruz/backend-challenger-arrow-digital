@@ -3,8 +3,7 @@ import { fetchHotThreads } from '../../services/redditService';
 import { Thread } from '../database/models/thread';
 import { ThreadMongo } from '../../interfaces/Thread';
 
-cron.schedule('0 9 * * *', async () => {
-  // A tarefa será executada todos os dias às 9:00 UTC
+export const fetchAndSaveThreads = async () => {
   console.log(
     'Executando tarefa agendada para buscar threads do subreddit artificial.'
   );
@@ -27,4 +26,7 @@ cron.schedule('0 9 * * *', async () => {
   } catch (error) {
     console.error('Erro ao salvar threads:', error);
   }
-});
+};
+
+// Agenda a tarefa para ser executada diariamente às 9:00 UTC
+export const scheduleTask = cron.schedule('0 9 * * *', fetchAndSaveThreads);
