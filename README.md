@@ -66,6 +66,13 @@ Antes de inicializar o projeto, é importante configurar algumas variáveis de a
 
 ## Inicializar a Aplicação
 
+- Obs: O cron.schedule está configurado para buscar as threads todos os dias às 9H. Mas este agendamento pode ser alterado.
+
+  ```
+    // Agenda a tarefa para ser executada diariamente às 9:00 UTC
+    export const scheduleTask = cron.schedule('0 9 * * *', fetchAndSaveThreads); // altere os minutos e hora se desejar
+  ```
+
 - Inicialize o back-end com o comando `npm run dev` ou `npm run start`
 - Com Docker utilize o comando `docker compose up` para subir o container e `docker compose down` para matá-los
 
@@ -79,11 +86,15 @@ Antes de inicializar o projeto, é importante configurar algumas variáveis de a
 
 ### Testes Unitários
 
-- to do
+- rode o comando `npm run test:unit`
 
 ### Testes de Integração
 
-- to do
+- rode o comando `npm run test:integration`
+
+### Cobertura
+
+- rode o comando `npm run test:coverage`
 
 ## Tecnologias Usadas
 
@@ -96,9 +107,6 @@ Antes de inicializar o projeto, é importante configurar algumas variáveis de a
 - [Express](https://expressjs.com/pt-br/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Jest](https://jestjs.io/pt-BR/)
-
-### Geral 🧾
-
 - [Docker](https://www.docker.com/)
 - [GitHub Actions](https://github.com/features/actions)
 </details>
