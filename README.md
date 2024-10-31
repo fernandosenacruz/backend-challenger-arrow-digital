@@ -9,7 +9,7 @@ O Deploy da aplicação foi feito no [Render](https://render.com/) utilizando de
 **Back-end**
 
 - **Redocly**: https://backend-challenger-arrow-digital.onrender.com/api/redocly
-- **Swagger**: https://backend-challenger-arrow-digital.onrender.com/api/swagger
+- **Swagger**: https://backend-challenger-arrow-digital.onrender.com/api/docs
 
 ### Testar Rotas do Back-end
 
@@ -106,6 +106,8 @@ Antes de inicializar o projeto, é importante configurar algumas variáveis de a
 
 - [Express](https://expressjs.com/pt-br/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Mongodb](https://www.mongodb.com/pt-br/docs/atlas/)
+- [Mongoose](https://mongoosejs.com/docs/guide.html)
 - [Jest](https://jestjs.io/pt-BR/)
 - [Docker](https://www.docker.com/)
 - [GitHub Actions](https://github.com/features/actions)
